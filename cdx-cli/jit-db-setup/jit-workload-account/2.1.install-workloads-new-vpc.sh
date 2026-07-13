@@ -312,6 +312,7 @@ echo "Please provide the following configuration details:"
 
 # AWS Configuration
 AWS_REGION=$(prompt_with_default "AWS Region" "us-east-1")
+export AWS_DEFAULT_REGION="$AWS_REGION"
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 echo "Your AWS Account ID is: $ACCOUNT_ID"
 # Project Configuration
@@ -425,10 +426,22 @@ aws ec2 attach-internet-gateway \
 
 # Create Subnets
 log "Creating subnets..."
+
+# Dynamically resolve AZs for the region
+AZ_1=$(aws ec2 describe-availability-zones \
+    --region "$AWS_REGION" \
+    --query "AvailabilityZones[0].ZoneName" \
+    --output text)
+AZ_2=$(aws ec2 describe-availability-zones \
+    --region "$AWS_REGION" \
+    --query "AvailabilityZones[1].ZoneName" \
+    --output text)
+log "Using AZs: $AZ_1, $AZ_2"
+
 PRIVATE_SUBNET_1_ID=$(aws ec2 create-subnet \
     --vpc-id $VPC_ID \
     --cidr-block $PRIVATE_SUBNET_1_CIDR \
-    --availability-zone "${AWS_REGION}a" \
+    --availability-zone "$AZ_1" \
     --tag-specifications "$SUBNET_TAG_SPEC" \
     --query 'Subnet.SubnetId' \
     --output text)
@@ -436,7 +449,7 @@ PRIVATE_SUBNET_1_ID=$(aws ec2 create-subnet \
 PRIVATE_SUBNET_2_ID=$(aws ec2 create-subnet \
     --vpc-id $VPC_ID \
     --cidr-block $PRIVATE_SUBNET_2_CIDR \
-    --availability-zone "${AWS_REGION}b" \
+    --availability-zone "$AZ_2" \
     --tag-specifications "$SUBNET_TAG_SPEC" \
     --query 'Subnet.SubnetId' \
     --output text)
@@ -444,7 +457,7 @@ PRIVATE_SUBNET_2_ID=$(aws ec2 create-subnet \
 PUBLIC_SUBNET_1_ID=$(aws ec2 create-subnet \
     --vpc-id $VPC_ID \
     --cidr-block $PUBLIC_SUBNET_1_CIDR \
-    --availability-zone "${AWS_REGION}a" \
+    --availability-zone "$AZ_1" \
     --tag-specifications "$SUBNET_TAG_SPEC" \
     --query 'Subnet.SubnetId' \
     --output text)
@@ -452,7 +465,7 @@ PUBLIC_SUBNET_1_ID=$(aws ec2 create-subnet \
 PUBLIC_SUBNET_2_ID=$(aws ec2 create-subnet \
     --vpc-id $VPC_ID \
     --cidr-block $PUBLIC_SUBNET_2_CIDR \
-    --availability-zone "${AWS_REGION}b" \
+    --availability-zone "$AZ_2" \
     --tag-specifications "$SUBNET_TAG_SPEC" \
     --query 'Subnet.SubnetId' \
     --output text)

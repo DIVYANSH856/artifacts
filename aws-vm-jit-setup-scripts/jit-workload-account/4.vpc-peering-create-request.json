@@ -1,0 +1,13 @@
+{
+    "vpc_peerings": [
+        {
+            "peering_name": "jit-vm-peering-1",
+            "requester_vpc_id": "vpc-0d76c4c2ab380be1a",
+            "accepter_account_id": "952490538873",
+            "accepter_vpc_id": "vpc-0b8c2e1251edfb72e",
+            "accepter_region": "us-east-1",
+            "accepter_cidr": "10.14.0.0/16",
+            "ecs_security_group_id": "sg-0f4e0a59095cc4b74"
+        }
+    ]
+}

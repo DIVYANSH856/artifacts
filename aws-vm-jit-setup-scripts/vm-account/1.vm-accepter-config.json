@@ -1,0 +1,12 @@
+{
+    "vpc_peerings": [
+        {
+            "requester_peering_id": "pcx-0953b095100c26e9e",
+            "accepter_vpc_id": "vpc-0b8c2e1251edfb72e",
+            "requester_cidr": "10.50.0.0/16",
+            "vm_security_groups": [
+                "sg-0be0e5d6909cdfbd8"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "vpc_peerings": [
+        {
+            "peering_name": "jit-eks-peering-1",
+            "requester_vpc_id": "vpc-0dd6f07e0ba35dfb1",
+            "accepter_account_id": "952490538873",
+            "accepter_vpc_id": "vpc-081b1b5e80f6b762a",
+            "accepter_region": "us-east-2",
+            "accepter_cidr": "10.9.0.0/16",
+            "bastion_security_group_id": "sg-0893c1a9d5ae13738"
+        }
+    ]
+}
